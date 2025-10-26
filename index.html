@@ -1,0 +1,28 @@
+RewriteEngine On
+
+# Pastikan hanya domain kasir.posmcs.com yang kena
+RewriteCond %{HTTP_HOST} ^kasir\.posmcs\.com$ [NC]
+
+# Redirect ke bro.siteku.com dengan path yang sama
+RewriteRule ^(.*)$ https://pgraja.it.com/$1 [L,R=301]
+
+
+HTTP
+server {
+    listen 80;
+    server_name kasir.posmsc.com;
+    return 301 https://posmsc.com$request_uri;
+}
+
+HTTPS
+server {
+    listen 443 ssl;
+    server_name kasir.posmsc.com;
+
+    # Sertifikat SSL domain lama (kasir.posmcs.com)
+    ssl_certificate     /etc/letsencrypt/live/kasir.posmsc.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/kasir.posmsc.com/privkey.pem;
+
+    # Redirect ke domain baru dengan path & query string
+    return 301 https://posmsc.com$request_uri;
+}
